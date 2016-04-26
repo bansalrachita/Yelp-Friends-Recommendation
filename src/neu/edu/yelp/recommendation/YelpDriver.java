@@ -87,7 +87,7 @@ public class YelpDriver {
 		conf.setInt("infinity", INFINITY);
 
 		while (count <= degree) {
-			Job job2 = new Job(conf, "Transitivity iteration Degree" + count);
+			Job job2 = new Job(conf, "Dijiskra shortest path to Degree" + count);
 			job2.setJarByClass(YelpDriver.class);
 			job2.setOutputKeyClass(Text.class);
 			job2.setOutputValueClass(Text.class);
@@ -109,7 +109,7 @@ public class YelpDriver {
 			output = OUT + System.nanoTime();
 		}
 
-		Job job3 = new Job(conf, "yelp Transitive Matrix");
+		Job job3 = new Job(conf, "Users Transitivity Matrix");
 		job3.setJarByClass(YelpDriver.class);
 		job3.setOutputKeyClass(Text.class);
 		job3.setOutputValueClass(Text.class);
@@ -138,7 +138,7 @@ public class YelpDriver {
 		// System.exit(1);
 		// }
 
-		Job job4 = new Job(conf, "yelp similarity");
+		Job job4 = new Job(conf, "Business Self Join Similarity List");
 		job4.setJarByClass(YelpDriver.class);
 
 		job4.setMapOutputKeyClass(TaggedKey.class);
@@ -156,7 +156,7 @@ public class YelpDriver {
 			System.exit(1);
 		}
 
-		Job job5 = new Job(conf, "yelp similarity list");
+		Job job5 = new Job(conf, "Similarity Matrix");
 		job5.setJarByClass(YelpDriver.class);
 
 		job5.setOutputKeyClass(Text.class);
@@ -173,7 +173,7 @@ public class YelpDriver {
 			System.exit(1);
 		}
 
-		Job job6 = new Job(conf, "yelp Recommendation Matrix");
+		Job job6 = new Job(conf, "Recommendation Matrix");
 		job6.setJarByClass(YelpDriver.class);
 		job6.setOutputKeyClass(Text.class);
 		job6.setOutputValueClass(Text.class);
