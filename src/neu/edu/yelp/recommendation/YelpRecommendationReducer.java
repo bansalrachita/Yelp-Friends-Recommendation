@@ -18,17 +18,17 @@ public class YelpRecommendationReducer extends Reducer<Text, Text, Text, Text> {
 			throws IOException, InterruptedException {
 		for (Text line : values) {
 			if (line != null && line.toString().length() > 0) {
-//				System.out.println(line);
+				System.out.println(line);
 				if (line.toString().split(" ")[0].equals("d")) {
 					Integer distance = Integer.parseInt(line.toString().split(
 							" ")[1]);
 					transitivityMap.put(key.toString(), distance);
-//					System.out.println(key + " " + distance);
+					System.out.println(key + " " + distance);
 				} else if (line.toString().split(" ")[0].equals("s")) {
 					// similarity
 					Double similarity = Double.parseDouble(line.toString()
 							.split(" ")[1]);
-//					System.out.println(key + " " + similarity);
+					System.out.println(key + " " + similarity);
 					similarityMap.put(key.toString(), similarity);
 				}
 			}
@@ -46,7 +46,7 @@ public class YelpRecommendationReducer extends Reducer<Text, Text, Text, Text> {
 			for (Map.Entry<String, Double> entry : similarityMap.entrySet()) {
 				String key = entry.getKey();
 				Double similarity = entry.getValue();
-				System.out.println(transitivityMap.containsKey(key));
+				System.out.println(key + ": " + transitivityMap.containsKey(key));
 				if (transitivityMap.containsKey(key) && similarity > 0
 						&& transitivityMap.get(key) > 0) {
 					recommendationScore = similarity

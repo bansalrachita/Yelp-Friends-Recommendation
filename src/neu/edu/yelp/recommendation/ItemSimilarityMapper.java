@@ -2,6 +2,7 @@ package neu.edu.yelp.recommendation;
 
 import java.io.IOException;
 
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -11,17 +12,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class ItemSimilarityMapper extends
-		Mapper<LongWritable, Text, Text, Text> {
+		Mapper<LongWritable, Text, TaggedKey, Text> {
 
 	String person = null;
 	Gson gson = new Gson();
+	TaggedKey taggedKey = new TaggedKey();
+	IntWritable businessPerson = new IntWritable(1);
+	IntWritable businessOther = new IntWritable(2);
 
 	@Override
 	protected void setup(Context context) throws IOException,
 			InterruptedException {
 		person = context.getConfiguration().get("person",
 				"qL7Astun3i7qwr2IL5iowA");
-		System.out.println("Reduce setup called! " + person);
 	}
 
 	public void map(LongWritable key, Text value, Context context) {
@@ -33,23 +36,41 @@ public class ItemSimilarityMapper extends
 				JsonElement jsonObjBusinessId = jsonObject.get("business_id");
 				JsonElement jsonObjStars = jsonObject.get("stars");
 				JsonElement jsonObjType = jsonObject.get("type");
-				
+
 				if (null != jsonObjType
 						&& jsonObjType.toString().equals("\"review\"")
-						&& jsonObjUserId.toString().equals("\"person\"")) {
+						&& jsonObjUserId.toString()
+								.equals("\"" + person + "\"")) {
+
+					taggedKey.set(new Text(jsonObjBusinessId.toString().substring(1,
+							jsonObjBusinessId.toString().length() - 1)),
+							businessPerson);
 					context.write(
-							new Text("P" + jsonObjBusinessId.toString().substring(1,
-									jsonObjBusinessId.toString().length() - 1)),
-							new Text(jsonObjUserId.toString()
+							taggedKey,
+							new Text("Business" + " " + jsonObjUserId.toString().substring(1,
+									jsonObjUserId.toString().length() - 1)
 									+ " "
-									+ jsonObjStars.toString()
-											.substring(
-													1,
-													jsonObjStars.toString()
-															.length() - 1)));
-					// <P businessId, userId stars>
+									+ jsonObjStars.toString()));
+					// <businessId, userId stars>
+				} else if (null != jsonObjType
+						&& jsonObjType.toString().equals("\"review\"")
+						&& !jsonObjUserId.toString().equals(
+								"\"" + person + "\"")) {
+
+					taggedKey.set(new Text(jsonObjBusinessId.toString().substring(1,
+							jsonObjBusinessId.toString().length() - 1)),
+							businessOther);
+					context.write(
+							taggedKey,
+							new Text(jsonObjUserId.toString().substring(1,
+									jsonObjUserId.toString().length() - 1)
+									+ " "
+									+ jsonObjStars.toString()));
 				}
 			}
+			
+			//businessId	Business userId stars
+			//businessId	userId stars
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

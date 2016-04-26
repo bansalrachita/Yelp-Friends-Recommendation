@@ -1,8 +1,5 @@
 package neu.edu.yelp.recommendation;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -24,9 +21,9 @@ public class YelpRecommendationMapper extends
 //					System.out.println(otherId + " " + distance);
 				} else if (line.split("\t")[0].length() > 1) {
 					// similarity
-					String otherId = line.split("\t")[1].split(" ")[0];
-					Double similarity = Double.parseDouble(line.split("\t")[1]
-							.split(" ")[1]);
+					String otherId = line.split("\t")[0].split(" ")[0];
+					Double similarity = Double.parseDouble(line.split("\t")[1]);
+							//.split(" ")[1]);
 					context.write(new Text(otherId), new Text("s " + similarity));
 //					System.out.println(otherId + " " + similarity);
 				}
