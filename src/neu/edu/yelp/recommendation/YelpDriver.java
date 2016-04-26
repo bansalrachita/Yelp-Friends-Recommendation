@@ -13,22 +13,26 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class YelpDriver {
 
 	public static final int INFINITY = 999;
-	public static final String TEMP_FOLDER = "temp/";
-
+	//public static final String TEMP_FOLDER = "temp/";
+	public static String TEMP_FOLDER ="temp";
+	
 	public static void main(String[] args) throws IOException,
 			ClassNotFoundException, InterruptedException {
 		Configuration conf = new Configuration();
-		final String OUT = TEMP_FOLDER + "output";
 
 		if (args.length < 4) {
 			System.out
 					.println("Usage: YelpDriver <input business> <input reviews> "
-							+ "<input users> <input userID> <degree of friends>");
+							+ "<input users> <input userID> <degree of friends> <output folder>");
 			System.exit(-1);
 		}
-
+		
+		if(args[5].length() > 0){
+			TEMP_FOLDER = args[5];
+		}
+		final String OUT = TEMP_FOLDER + "/output";
+		
 		Job job = new Job(conf, "One to Many business Inner Join reviews");
-
 		job.setJarByClass(YelpDriver.class);
 		job.setMapOutputKeyClass(TaggedKey.class);
 		job.setMapOutputValueClass(Text.class);
@@ -37,7 +41,7 @@ public class YelpDriver {
 
 		FileInputFormat.addInputPaths(job, new Path(args[0]) + ","
 				+ new Path(args[1]));
-		FileOutputFormat.setOutputPath(job, new Path(TEMP_FOLDER + "cPath"));
+		FileOutputFormat.setOutputPath(job, new Path(TEMP_FOLDER + "/cPath"));
 		job.setMapperClass(CombineBusinessReviewsMapper.class);
 		job.setReducerClass(CombineBusinessReviewsReducer.class);
 		job.setPartitionerClass(TaggedJoiningPartitioner.class);
@@ -47,7 +51,7 @@ public class YelpDriver {
 		}
 
 		String fPath = args[2];
-		String cPath = TEMP_FOLDER + "cPath/part-r-00000";
+		String cPath = TEMP_FOLDER + "/cPath";
 		String userId = args[3];
 		int degree = 0;
 
@@ -67,7 +71,7 @@ public class YelpDriver {
 		job1.setOutputValueClass(Text.class);
 		FileInputFormat.addInputPath(job1, new Path(fPath));
 		FileOutputFormat.setOutputPath(job1, new Path(TEMP_FOLDER
-				+ "friendsList"));
+				+ "/friendsList"));
 
 		job1.setMapperClass(FriendsAdjacencyListMapper.class);
 		job1.setReducerClass(FriendsAdjacencyListReducer.class);
@@ -78,7 +82,7 @@ public class YelpDriver {
 
 		// iterate to get shortest path from others
 		String output = OUT + System.nanoTime();
-		String input = TEMP_FOLDER + "friendsList/part-r-00000";
+		String input = TEMP_FOLDER + "/friendsList";
 		int count = 1;
 		conf.setInt("infinity", INFINITY);
 
@@ -100,7 +104,7 @@ public class YelpDriver {
 			}
 
 			count++;
-			input = output + "/part-r-00000";
+			input = output;
 			input = output;
 			output = OUT + System.nanoTime();
 		}
@@ -111,7 +115,7 @@ public class YelpDriver {
 		job3.setOutputValueClass(Text.class);
 		FileInputFormat.addInputPath(job3, new Path(input));
 		FileOutputFormat.setOutputPath(job3, new Path(TEMP_FOLDER
-				+ "myTransitiveMatrix"));
+				+ "/myTransitiveMatrix"));
 		job3.setMapperClass(YelpTransitiveMatrixMapper.class);
 		job3.setReducerClass(YelpTransitiveMatrixReducer.class);
 		System.out.println("before wait for completion job 3");
@@ -143,7 +147,7 @@ public class YelpDriver {
 		job4.setOutputValueClass(Text.class);
 		FileInputFormat.addInputPath(job4, new Path(cPath));
 		FileOutputFormat.setOutputPath(job4, new Path(TEMP_FOLDER
-				+ "mySimilarityList"));
+				+ "/mySimilarityList"));
 		job4.setMapperClass(ItemSimilarityMapper.class);
 		job4.setReducerClass(ItemSimilarityReducer.class);
 		job4.setPartitionerClass(TaggedJoiningPartitioner.class);
@@ -158,9 +162,9 @@ public class YelpDriver {
 		job5.setOutputKeyClass(Text.class);
 		job5.setOutputValueClass(Text.class);
 		FileInputFormat.addInputPath(job5, new Path(TEMP_FOLDER
-				+ "mySimilarityList"));
+				+ "/mySimilarityList"));
 		FileOutputFormat.setOutputPath(job5, new Path(TEMP_FOLDER
-				+ "mySimilarityList1"));
+				+ "/usersSimilarityList"));
 		job5.setMapperClass(SimilarityMapper.class);
 		job5.setNumReduceTasks(0);
 		// job6.setReducerClass(ItemSimilarityReducer.class);
@@ -174,9 +178,9 @@ public class YelpDriver {
 		job6.setOutputKeyClass(Text.class);
 		job6.setOutputValueClass(Text.class);
 		FileInputFormat.addInputPaths(job6, new Path(TEMP_FOLDER
-				+ "mySimilarityList1/part-m-00000")
-				+ "," + new Path(TEMP_FOLDER + "myTransitiveMatrix"));
-		FileOutputFormat.setOutputPath(job6, new Path("myRecommendations"));
+				+ "/usersSimilarityList")
+				+ "," + new Path(TEMP_FOLDER + "/myTransitiveMatrix"));
+		FileOutputFormat.setOutputPath(job6, new Path(TEMP_FOLDER + "/myRecommendations"));
 		job6.setNumReduceTasks(1);
 		job6.setMapperClass(YelpRecommendationMapper.class);
 		job6.setReducerClass(YelpRecommendationReducer.class);

@@ -52,8 +52,8 @@ public class YelpRecommendationReducer extends Reducer<Text, Text, Text, Text> {
 					recommendationScore = similarity
 							* (2 / transitivityMap.get(key));
 					if(recommendationScore > 0){
-						context.write(new Text(recommendationScore
-								+ ""),new Text(key));
+						context.write(new Text(key), new Text(recommendationScore
+								+ ""));
 					}
 					
 //					System.out.println(transitivityMap.get(key));
