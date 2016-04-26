@@ -50,13 +50,6 @@ public class SimilarityMapper extends Mapper<LongWritable, Text, Text, Text> {
 	protected void cleanup(Context context) throws IOException,
 			InterruptedException {
 		try {
-
-			System.out.println("inside cleanup!");
-			// for (Map.Entry<String, Double> entry : personMap.entrySet()) {
-			// mySimilaritySum += entry.getValue();
-			// mySimilarityPower += Math.pow(entry.getValue(), 2);
-			// }
-
 			for (Map.Entry<String, HashMap<String, Double>> entry : usersMap
 					.entrySet()) {
 				String userIds = entry.getKey();
@@ -67,7 +60,7 @@ public class SimilarityMapper extends Mapper<LongWritable, Text, Text, Text> {
 				double otherSimilarityPower = 0;
 				double sumOfProducts = 0;
 				double pearsonScore = 0;
-				
+
 				for (Map.Entry<String, Double> entryItems : entry.getValue()
 						.entrySet()) {
 					if (personMap.containsKey(entryItems.getKey())) {

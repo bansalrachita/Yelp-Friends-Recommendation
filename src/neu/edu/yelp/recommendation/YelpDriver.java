@@ -2,7 +2,6 @@ package neu.edu.yelp.recommendation;
 
 import java.io.IOException;
 
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
@@ -19,7 +18,7 @@ public class YelpDriver {
 	public static void main(String[] args) throws IOException,
 			ClassNotFoundException, InterruptedException {
 		Configuration conf = new Configuration();
-		final String OUT = TEMP_FOLDER + "sp_output";
+		final String OUT = TEMP_FOLDER + "output";
 
 		if (args.length < 4) {
 			System.out
@@ -28,14 +27,14 @@ public class YelpDriver {
 			System.exit(-1);
 		}
 
-		Job job = new Job(conf, "yelp join business and reviews");
-		
+		Job job = new Job(conf, "One to Many business Inner Join reviews");
+
 		job.setJarByClass(YelpDriver.class);
 		job.setMapOutputKeyClass(TaggedKey.class);
 		job.setMapOutputValueClass(Text.class);
 		job.setOutputKeyClass(NullWritable.class);
 		job.setOutputValueClass(Text.class);
-		
+
 		FileInputFormat.addInputPaths(job, new Path(args[0]) + ","
 				+ new Path(args[1]));
 		FileOutputFormat.setOutputPath(job, new Path(TEMP_FOLDER + "cPath"));
@@ -61,7 +60,7 @@ public class YelpDriver {
 		conf.set("person", userId);
 		conf.setInt("degree", degree);
 
-		Job job1 = new Job(conf, "yelp friends adjacencylist");
+		Job job1 = new Job(conf, "Users Friends adjacency List");
 		job1.setJarByClass(YelpDriver.class);
 
 		job1.setOutputKeyClass(Text.class);
@@ -84,7 +83,7 @@ public class YelpDriver {
 		conf.setInt("infinity", INFINITY);
 
 		while (count <= degree) {
-			Job job2 = new Job(conf, "yelp transitivity degree" + count);
+			Job job2 = new Job(conf, "Transitivity iteration Degree" + count);
 			job2.setJarByClass(YelpDriver.class);
 			job2.setOutputKeyClass(Text.class);
 			job2.setOutputValueClass(Text.class);
@@ -120,23 +119,21 @@ public class YelpDriver {
 			System.exit(1);
 		}
 
-//		Job job4 = new Job(conf, "yelp similarity");
-//		job4.setJarByClass(YelpDriver.class);
-//
-//		job4.setOutputKeyClass(Text.class);
-//		job4.setOutputValueClass(Text.class);
-//		FileInputFormat.addInputPath(job4, new Path(cPath));
-//		FileOutputFormat.setOutputPath(job4, new Path(TEMP_FOLDER
-//				+ "mySimilarityList"));
-//		job4.setMapperClass(SimilarityMatrixMapper.class);
-//		job4.setReducerClass(SimilarityMatrixReducer.class);
-//		System.out.println("before wait for completion job 4");
-//		if (!job4.waitForCompletion(true)) {
-//			System.exit(1);
-//		}
-		
-		
-		
+		// Job job4 = new Job(conf, "yelp similarity");
+		// job4.setJarByClass(YelpDriver.class);
+		//
+		// job4.setOutputKeyClass(Text.class);
+		// job4.setOutputValueClass(Text.class);
+		// FileInputFormat.addInputPath(job4, new Path(cPath));
+		// FileOutputFormat.setOutputPath(job4, new Path(TEMP_FOLDER
+		// + "mySimilarityList"));
+		// job4.setMapperClass(SimilarityMatrixMapper.class);
+		// job4.setReducerClass(SimilarityMatrixReducer.class);
+		// System.out.println("before wait for completion job 4");
+		// if (!job4.waitForCompletion(true)) {
+		// System.exit(1);
+		// }
+
 		Job job4 = new Job(conf, "yelp similarity");
 		job4.setJarByClass(YelpDriver.class);
 
@@ -154,37 +151,37 @@ public class YelpDriver {
 		if (!job4.waitForCompletion(true)) {
 			System.exit(1);
 		}
-		
-		Job job6 = new Job(conf, "yelp similarity list");
-		job6.setJarByClass(YelpDriver.class);
 
-		job6.setOutputKeyClass(Text.class);
-		job6.setOutputValueClass(Text.class);
-		FileInputFormat.addInputPath(job6, new Path(TEMP_FOLDER
+		Job job5 = new Job(conf, "yelp similarity list");
+		job5.setJarByClass(YelpDriver.class);
+
+		job5.setOutputKeyClass(Text.class);
+		job5.setOutputValueClass(Text.class);
+		FileInputFormat.addInputPath(job5, new Path(TEMP_FOLDER
 				+ "mySimilarityList"));
-		FileOutputFormat.setOutputPath(job6, new Path(TEMP_FOLDER
+		FileOutputFormat.setOutputPath(job5, new Path(TEMP_FOLDER
 				+ "mySimilarityList1"));
-		job6.setMapperClass(SimilarityMapper.class);
-		job6.setNumReduceTasks(0);
-		//job6.setReducerClass(ItemSimilarityReducer.class);
+		job5.setMapperClass(SimilarityMapper.class);
+		job5.setNumReduceTasks(0);
+		// job6.setReducerClass(ItemSimilarityReducer.class);
 		System.out.println("before wait for completion job 6");
-		if (!job6.waitForCompletion(true)) {
+		if (!job5.waitForCompletion(true)) {
 			System.exit(1);
 		}
 
-		Job job5 = new Job(conf, "yelp Recommendation Matrix");
-		job5.setJarByClass(YelpDriver.class);
-		job5.setOutputKeyClass(Text.class);
-		job5.setOutputValueClass(Text.class);
-		FileInputFormat.addInputPaths(job5, new Path(TEMP_FOLDER
+		Job job6 = new Job(conf, "yelp Recommendation Matrix");
+		job6.setJarByClass(YelpDriver.class);
+		job6.setOutputKeyClass(Text.class);
+		job6.setOutputValueClass(Text.class);
+		FileInputFormat.addInputPaths(job6, new Path(TEMP_FOLDER
 				+ "mySimilarityList1/part-m-00000")
 				+ "," + new Path(TEMP_FOLDER + "myTransitiveMatrix"));
-		FileOutputFormat.setOutputPath(job5, new Path("myRecommendations"));
-		job5.setNumReduceTasks(1);
-		job5.setMapperClass(YelpRecommendationMapper.class);
-		job5.setReducerClass(YelpRecommendationReducer.class);
+		FileOutputFormat.setOutputPath(job6, new Path("myRecommendations"));
+		job6.setNumReduceTasks(1);
+		job6.setMapperClass(YelpRecommendationMapper.class);
+		job6.setReducerClass(YelpRecommendationReducer.class);
 		System.out.println("before wait for completion job 5");
-		if (!job5.waitForCompletion(true)) {
+		if (!job6.waitForCompletion(true)) {
 			System.exit(1);
 		}
 	}

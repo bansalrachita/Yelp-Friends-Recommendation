@@ -18,7 +18,7 @@ public class YelpRecommendationReducer extends Reducer<Text, Text, Text, Text> {
 			throws IOException, InterruptedException {
 		for (Text line : values) {
 			if (line != null && line.toString().length() > 0) {
-				System.out.println(line);
+//				System.out.println(line);
 				if (line.toString().split(" ")[0].equals("d")) {
 					Integer distance = Integer.parseInt(line.toString().split(
 							" ")[1]);
@@ -28,7 +28,7 @@ public class YelpRecommendationReducer extends Reducer<Text, Text, Text, Text> {
 					// similarity
 					Double similarity = Double.parseDouble(line.toString()
 							.split(" ")[1]);
-					System.out.println(key + " " + similarity);
+//					System.out.println(key + " " + similarity);
 					similarityMap.put(key.toString(), similarity);
 				}
 			}
@@ -39,21 +39,21 @@ public class YelpRecommendationReducer extends Reducer<Text, Text, Text, Text> {
 	protected void cleanup(Context context) throws IOException,
 			InterruptedException {
 		try {
-			System.out.println("inside cleanup!");
+//			System.out.println("inside cleanup!");
 			Double recommendationScore = 0.0;
-			System.out.println(similarityMap.size());
-			System.out.println(transitivityMap.size());
+//			System.out.println(similarityMap.size());
+//			System.out.println(transitivityMap.size());
 			for (Map.Entry<String, Double> entry : similarityMap.entrySet()) {
 				String key = entry.getKey();
 				Double similarity = entry.getValue();
-				System.out.println(key + ": " + transitivityMap.containsKey(key));
+//				System.out.println(key + ": " + transitivityMap.containsKey(key));
 				if (transitivityMap.containsKey(key) && similarity > 0
 						&& transitivityMap.get(key) > 0) {
 					recommendationScore = similarity
 							* (2 / transitivityMap.get(key));
 					if(recommendationScore > 0){
-						context.write(new Text(key), new Text(recommendationScore
-								+ ""));
+						context.write(new Text(recommendationScore
+								+ ""),new Text(key));
 					}
 					
 //					System.out.println(transitivityMap.get(key));
