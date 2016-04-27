@@ -37,41 +37,53 @@ public class ItemSimilarityMapper extends
 				JsonElement jsonObjBusinessId = jsonObject.get("business_id");
 				JsonElement jsonObjStars = jsonObject.get("stars");
 				JsonElement jsonObjType = jsonObject.get("type");
-				System.out.println("jsonObjBusinessId : " + jsonObjBusinessId + "jsonObjUserId : " + jsonObjUserId);
+//				System.out.println("jsonObjBusinessId : " + jsonObjBusinessId
+//						+ "jsonObjUserId : " + jsonObjUserId);
 				if (null != jsonObjType
 						&& jsonObjType.toString().equals("\"review\"")
 						&& jsonObjUserId.toString()
 								.equals("\"" + person + "\"")) {
 
-					taggedKey.set(new Text(jsonObjBusinessId.toString().substring(1,
-							jsonObjBusinessId.toString().length() - 1)),
-							businessPerson);
+					taggedKey
+							.set(new Text(jsonObjBusinessId.toString()
+									.substring(
+											1,
+											jsonObjBusinessId.toString()
+													.length() - 1)),
+									businessPerson);
 					context.write(
 							taggedKey,
-							new Text("Business" + " " + jsonObjUserId.toString().substring(1,
-									jsonObjUserId.toString().length() - 1)
+							new Text("Business"
 									+ " "
-									+ jsonObjStars.toString()));
+									+ jsonObjUserId.toString()
+											.substring(
+													1,
+													jsonObjUserId.toString()
+															.length() - 1)
+									+ " " + jsonObjStars.toString()));
 					// <businessId, userId stars>
 				} else if (null != jsonObjType
 						&& jsonObjType.toString().equals("\"review\"")
 						&& !jsonObjUserId.toString().equals(
 								"\"" + person + "\"")) {
 
-					taggedKey.set(new Text(jsonObjBusinessId.toString().substring(1,
-							jsonObjBusinessId.toString().length() - 1)),
-							businessOther);
+					taggedKey
+							.set(new Text(jsonObjBusinessId.toString()
+									.substring(
+											1,
+											jsonObjBusinessId.toString()
+													.length() - 1)),
+									businessOther);
 					context.write(
 							taggedKey,
 							new Text(jsonObjUserId.toString().substring(1,
 									jsonObjUserId.toString().length() - 1)
-									+ " "
-									+ jsonObjStars.toString()));
+									+ " " + jsonObjStars.toString()));
 				}
 			}
-			
-			//businessId	Business userId stars
-			//businessId	userId stars
+
+			// businessId Business userId stars
+			// businessId userId stars
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

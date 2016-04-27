@@ -16,9 +16,7 @@ public class SimilarityReducer extends Reducer<Text, Text, Text, Text> {
 	public void reduce(Text key, Iterable<Text> values, Context context)
 			throws IOException, InterruptedException {
 		for (Text line : values) {
-			// Text word = new Text();
 			String[] words = line.toString().split(" ");
-			System.out.println(line.toString());
 			if (key.toString().split(" ")[0]
 					.equals(key.toString().split(" ")[1])) {
 				System.out.println("inside return " + key.toString());
