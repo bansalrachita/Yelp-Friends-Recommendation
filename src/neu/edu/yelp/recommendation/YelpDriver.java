@@ -13,7 +13,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class YelpDriver {
 
 	public static final int INFINITY = 999;
-	//public static final String TEMP_FOLDER = "temp/";
 	public static String TEMP_FOLDER ="temp";
 	
 	public static void main(String[] args) throws IOException,
@@ -34,6 +33,7 @@ public class YelpDriver {
 		
 		Job job = new Job(conf, "One to Many business Inner Join reviews");
 		job.setJarByClass(YelpDriver.class);
+		job.setNumReduceTasks(6);
 		job.setMapOutputKeyClass(TaggedKey.class);
 		job.setMapOutputValueClass(Text.class);
 		job.setOutputKeyClass(NullWritable.class);
@@ -44,7 +44,7 @@ public class YelpDriver {
 		FileOutputFormat.setOutputPath(job, new Path(TEMP_FOLDER + "/cPath"));
 		job.setMapperClass(CombineBusinessReviewsMapper.class);
 		job.setReducerClass(CombineBusinessReviewsReducer.class);
-		job.setPartitionerClass(TaggedJoiningPartitioner.class);
+//		job.setPartitionerClass(TaggedJoiningPartitioner.class);
 		System.out.println("before wait for completion job");
 		if (!job.waitForCompletion(true)) {
 			System.exit(1);
@@ -122,22 +122,7 @@ public class YelpDriver {
 		if (!job3.waitForCompletion(true)) {
 			System.exit(1);
 		}
-
-		// Job job4 = new Job(conf, "yelp similarity");
-		// job4.setJarByClass(YelpDriver.class);
-		//
-		// job4.setOutputKeyClass(Text.class);
-		// job4.setOutputValueClass(Text.class);
-		// FileInputFormat.addInputPath(job4, new Path(cPath));
-		// FileOutputFormat.setOutputPath(job4, new Path(TEMP_FOLDER
-		// + "mySimilarityList"));
-		// job4.setMapperClass(SimilarityMatrixMapper.class);
-		// job4.setReducerClass(SimilarityMatrixReducer.class);
-		// System.out.println("before wait for completion job 4");
-		// if (!job4.waitForCompletion(true)) {
-		// System.exit(1);
-		// }
-
+		
 		Job job4 = new Job(conf, "Business Self Join Similarity List");
 		job4.setJarByClass(YelpDriver.class);
 
@@ -149,8 +134,9 @@ public class YelpDriver {
 		FileOutputFormat.setOutputPath(job4, new Path(TEMP_FOLDER
 				+ "/mySimilarityList"));
 		job4.setMapperClass(ItemSimilarityMapper.class);
+		job4.setNumReduceTasks(3);
 		job4.setReducerClass(ItemSimilarityReducer.class);
-		job4.setPartitionerClass(TaggedJoiningPartitioner.class);
+//		job4.setPartitionerClass(TaggedJoiningPartitioner.class);
 		System.out.println("before wait for completion job 4");
 		if (!job4.waitForCompletion(true)) {
 			System.exit(1);
@@ -188,6 +174,7 @@ public class YelpDriver {
 		if (!job6.waitForCompletion(true)) {
 			System.exit(1);
 		}
+ 
 	}
 
 }

@@ -68,10 +68,10 @@ public class TaggedKey implements Writable, WritableComparable<TaggedKey> {
 		return false;
 	}
 
-//	@Override
-//	public int hashCode() {
-//		return joinKey.hashCode() + tag.hashCode();
-//	};
+	@Override
+	public int hashCode() {
+		return joinKey.hashCode();
+	};
 
 	@Override
 	public String toString() {

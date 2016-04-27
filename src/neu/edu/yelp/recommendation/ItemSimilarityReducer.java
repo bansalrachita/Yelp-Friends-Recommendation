@@ -18,6 +18,7 @@ public class ItemSimilarityReducer extends
 
 		for (Text line : values) {
 			Text word = new Text();
+			System.out.println("start :" + line.toString() + "key :" + key.toString());
 			if (line.toString().length() > 0) {
 				if (line.toString().contains("Business")) {
 					bIds.add(key.toString());
@@ -29,12 +30,14 @@ public class ItemSimilarityReducer extends
 							+ key.toString() + " "
 							+ line.toString().split(" ")[2]);
 					context.write(nullKey, word);
+					System.out.println("word if :" + word.toString());
 				}
 				else if(bIds.contains(key.toString()) && !line.toString().contains("Business")){
 					word.set(line.toString().split(" ")[0] + " " + person + " "
 							+ key.toString() + " "
 							+ line.toString().split(" ")[1]);
 					context.write(nullKey, word);
+					System.out.println("word else : " + word.toString());
 				}
 				// UserId person businessId,stars
 			}

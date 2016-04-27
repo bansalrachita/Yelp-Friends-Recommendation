@@ -21,7 +21,7 @@ public class SimilarityReducer extends Reducer<Text, Text, Text, Text> {
 			System.out.println(line.toString());
 			if (key.toString().split(" ")[0]
 					.equals(key.toString().split(" ")[1])) {
-				System.out.println("inside return " +  key.toString());
+				System.out.println("inside return " + key.toString());
 				return;
 			}
 
@@ -106,12 +106,12 @@ public class SimilarityReducer extends Reducer<Text, Text, Text, Text> {
 
 				context.write(new Text(userIds), new Text(pearsonScore + ""));
 
-				System.out.println("mySimilaritySum : " + mySimilaritySum
-						+ "otherSimilaritySum : " + otherSimilaritySum
-						+ "mySimilarityPower : " + mySimilarityPower
-						+ "otherSimilarityPower: " + otherSimilarityPower
-						+ "sumOfProducts :" + sumOfProducts + "count: " + count
-						+ "pearsonScore : " + pearsonScore);
+				// System.out.println("mySimilaritySum : " + mySimilaritySum
+				// + "otherSimilaritySum : " + otherSimilaritySum
+				// + "mySimilarityPower : " + mySimilarityPower
+				// + "otherSimilarityPower: " + otherSimilarityPower
+				// + "sumOfProducts :" + sumOfProducts + "count: " + count
+				// + "pearsonScore : " + pearsonScore);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

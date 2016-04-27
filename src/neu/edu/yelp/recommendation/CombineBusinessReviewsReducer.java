@@ -3,7 +3,6 @@ package neu.edu.yelp.recommendation;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -20,7 +19,7 @@ public class CombineBusinessReviewsReducer extends
 
 		for (Text line : values) {
 			Text word = new Text();
-//			System.out.println(key.toString() + " " + line);
+			// System.out.println(key.toString() + " " + line);
 
 			if (line.toString().length() > 0) {
 				if (line.toString().contains("Las Vegas")) {

@@ -30,13 +30,14 @@ public class ItemSimilarityMapper extends
 	public void map(LongWritable key, Text value, Context context) {
 		try {
 			String line = value.toString();
+			System.out.println(line);
 			if (line != null && line.length() > 0) {
 				JsonObject jsonObject = gson.fromJson(line, JsonObject.class);
 				JsonElement jsonObjUserId = jsonObject.get("user_id");
 				JsonElement jsonObjBusinessId = jsonObject.get("business_id");
 				JsonElement jsonObjStars = jsonObject.get("stars");
 				JsonElement jsonObjType = jsonObject.get("type");
-
+				System.out.println("jsonObjBusinessId : " + jsonObjBusinessId + "jsonObjUserId : " + jsonObjUserId);
 				if (null != jsonObjType
 						&& jsonObjType.toString().equals("\"review\"")
 						&& jsonObjUserId.toString()
