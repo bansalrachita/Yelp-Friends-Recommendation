@@ -21,7 +21,7 @@ public class YelpRecommendationMapper extends
 //					System.out.println(otherId + " " + distance);
 				} else if (line.split("\t")[0].length() > 1) {
 					// similarity
-					String otherId = line.split("\t")[0].split(" ")[0];
+					String otherId = line.split("\t")[0].split(" ")[1];
 					Double similarity = Double.parseDouble(line.split("\t")[1]);
 							//.split(" ")[1]);
 					context.write(new Text(otherId), new Text("s " + similarity));

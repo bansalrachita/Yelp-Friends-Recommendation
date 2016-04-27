@@ -166,9 +166,9 @@ public class YelpDriver {
 		FileOutputFormat.setOutputPath(job5, new Path(TEMP_FOLDER
 				+ "/usersSimilarityList"));
 		job5.setMapperClass(SimilarityMapper.class);
-		job5.setNumReduceTasks(0);
-		// job6.setReducerClass(ItemSimilarityReducer.class);
-		System.out.println("before wait for completion job 6");
+		//job5.setNumReduceTasks(0);
+		job5.setReducerClass(SimilarityReducer.class);
+		System.out.println("before wait for completion job 5");
 		if (!job5.waitForCompletion(true)) {
 			System.exit(1);
 		}
@@ -184,7 +184,7 @@ public class YelpDriver {
 		job6.setNumReduceTasks(1);
 		job6.setMapperClass(YelpRecommendationMapper.class);
 		job6.setReducerClass(YelpRecommendationReducer.class);
-		System.out.println("before wait for completion job 5");
+		System.out.println("before wait for completion job 6");
 		if (!job6.waitForCompletion(true)) {
 			System.exit(1);
 		}
