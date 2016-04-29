@@ -26,7 +26,7 @@ public class SimilarityMapper extends Mapper<LongWritable, Text, Text, Text> {
 				if (personMap.containsKey(words[2]) && personMap != null && !words[0].equals(words[1])) {
 					context.write(new Text(person + " " + words[0]), new Text(
 							words[2] + " " + +personMap.get(words[2]) + " "
-									+ words[3]));
+									+ words[3]));//person user, business personRating userRating
 				}
 
 			}

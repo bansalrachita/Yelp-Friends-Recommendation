@@ -22,7 +22,7 @@ public class FriendsAdjacencyListReducer extends Reducer<Text, Text, Text, Text>
 			Text word = new Text();
 			String minDistance = line.toString().split(" ")[0];
 			word.set(line.toString());
-			if (key.toString().equals(person)) {
+			if (key.toString().equals(person) && line.toString().split(" ").length>0) {
 				String start = minDistance.replace(minDistance, "0");
 				word.set(start + " " + line.toString().split(" ")[1]);
 			}

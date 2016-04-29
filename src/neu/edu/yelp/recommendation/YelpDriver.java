@@ -134,7 +134,7 @@ public class YelpDriver {
 		FileOutputFormat.setOutputPath(job4, new Path(TEMP_FOLDER
 				+ "/mySimilarityList"));
 		job4.setMapperClass(ItemSimilarityMapper.class);
-		job4.setNumReduceTasks(3);
+//		job4.setNumReduceTasks(3);
 		job4.setReducerClass(ItemSimilarityReducer.class);
 //		job4.setPartitionerClass(TaggedJoiningPartitioner.class);
 		System.out.println("before wait for completion job 4");
