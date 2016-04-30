@@ -11,5 +11,13 @@ This project recommends a users other users based on collaborative filtering on 
   * run the command - **bin/hadoop jar /target/yelp_Recommendation-0.0.1-SNAPSHOT-jar-with-dependencies.jar business_data reviews_data users_data userID degree _(optional)_ outputfolderName _(optional)_**
   
 ##Results
+
+Let's find out recommendations for Tina 
+
+###Tina's reviewed businesses -
 ![alt text](https://github.com/bansalrachita/Yelp-Friends-Recommendation/blob/master/images/tina.png "Recommendation for user Tina")
+
+###Recommended friends -
+![alt text](https://github.com/bansalrachita/Yelp-Friends-Recommendation/blob/master/images/result.png "Recommendations")
+
 
