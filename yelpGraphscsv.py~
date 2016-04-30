@@ -46,7 +46,7 @@ def generate_business_sequence():
 
 
 if __name__ == '__main__':
-	generate_sequence() #output is given to R and create plots
-	generate_business_sequence() #output is given to R and create plots
+	generate_sequence()
+	generate_business_sequence()
 	#get_recommendation_list()
 
