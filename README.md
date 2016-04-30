@@ -14,10 +14,10 @@ This project recommends a users other users based on collaborative filtering on 
 
 Let's find out recommendations for Tina 
 
-###Tina's reviewed businesses -
+####Tina's reviewed businesses -
 ![alt text](https://github.com/bansalrachita/Yelp-Friends-Recommendation/blob/master/images/tina.png "Recommendation for user Tina")
 
-###Recommended friends -
+####Recommended friends
 ![alt text](https://github.com/bansalrachita/Yelp-Friends-Recommendation/blob/master/images/result.png "Recommendations")
 
 
