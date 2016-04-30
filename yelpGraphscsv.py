@@ -1,7 +1,3 @@
-import calendar
-import matplotlib.pyplot as plt
-from matplotlib import rc, rcParams
-import numpy as np
 import random
 import json
 import csv
